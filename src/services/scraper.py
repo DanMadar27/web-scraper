@@ -23,5 +23,4 @@ def weapons_info(update_page):
     soup = BeautifulSoup(update_page.text, 'html.parser')
     h3_tag = soup.find(find_weapons_title)
     weapons_info = h3_tag.find_next('ul')
-    weapons = weapons_info.find_all('li')
-    return weapons
+    return weapons_info
