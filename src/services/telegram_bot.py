@@ -2,22 +2,19 @@ from os import environ
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import threading
-from logging import basicConfig as logging_basicConfig, INFO
 
 from src.services.scraper import get_updates, get_notes
+from src.utils.users import getUsername
 from src.utils.files import modification_time, html_to_pdf
 from src.utils.rateLimit import is_rate_limited, reset_rate_limit
 from src.config.files import WEAPONS_PATH
-
-logging_basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=INFO
-)
 
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if is_rate_limited():
         return
     
+    print('/start - ' + getUsername(update.message.from_user))
+
     await update.message.reply_text(
         'Hello, I am the Call of Duty Bot. I will keep you updated with the latest patch notes.\n' +
         'Use /help to see the possible commands.'
@@ -27,6 +24,8 @@ async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     if is_rate_limited():
         return
     
+    print('/help - ' + getUsername(update.message.from_user))
+
     await update.message.reply_text(
         '/start - Show a welcome message\n' +
         '/help - Show possible commands\n' + 
@@ -36,6 +35,8 @@ async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 async def updates_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if is_rate_limited():
         return
+    
+    print('/updates - ' + getUsername(update.message.from_user))
     
     # Get updates later than the last fetch
     updates = get_updates(modification_time(WEAPONS_PATH))
@@ -55,7 +56,6 @@ async def updates_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     await context.bot.send_document(chat_id = update.message.chat_id, document = open(WEAPONS_PATH, 'rb'))
 
 def start():
-    print('Starting bot...')
     app = ApplicationBuilder().token(environ.get('BOT_TOKEN')).build()
 
     app.add_handler(CommandHandler('start', start_handler))
