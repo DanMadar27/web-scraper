@@ -1,10 +1,12 @@
 from os import environ
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+import threading
 from logging import basicConfig as logging_basicConfig, INFO
 
 from src.services.scraper import get_updates, get_notes
 from src.utils.files import modification_time, html_to_pdf
+from src.utils.rateLimit import is_rate_limited, reset_rate_limit
 from src.config.files import WEAPONS_PATH
 
 logging_basicConfig(
@@ -13,18 +15,27 @@ logging_basicConfig(
 )
 
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if is_rate_limited():
+        return
+    
     await update.message.reply_text(
         'Hello, I am the Call of Duty Bot. I will keep you updated with the latest patch notes.\n' +
         'Use /help to see the possible commands.'
     )
 
 async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if is_rate_limited():
+        return
+    
     await update.message.reply_text(
         '/help - Show possible commands\n' + 
         '/updates - Get the latest patch notes of Call of Duty'
     )
 
 async def updates_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if is_rate_limited():
+        return
+    
     # Get updates later than the last fetch
     updates = get_updates(modification_time(WEAPONS_PATH))
 
@@ -49,5 +60,8 @@ def start():
     app.add_handler(CommandHandler('start', start_handler))
     app.add_handler(CommandHandler('help', help_handler))
     app.add_handler(CommandHandler('updates', updates_handler))
+
+    # Start rate limit reset thread
+    threading.Thread(target = reset_rate_limit).start()
 
     app.run_polling()
