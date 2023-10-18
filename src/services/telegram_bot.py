@@ -28,6 +28,7 @@ async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         return
     
     await update.message.reply_text(
+        '/start - Show a welcome message\n' +
         '/help - Show possible commands\n' + 
         '/updates - Get the latest patch notes of Call of Duty'
     )
