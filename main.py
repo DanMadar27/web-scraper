@@ -14,9 +14,12 @@ if __name__ == '__main__':
 
     # If there are latest patch notes, get the notes and convert to pdf
     if updates:
-        update_notes = get_notes(updates[0])
-        html_to_pdf(str(update_notes), WEAPONS_PATH)
-        print('New updates found')
+        try:
+            update_notes = get_notes(updates[0])
+            html_to_pdf(str(update_notes), WEAPONS_PATH)
+            print('New updates found')
+        except Exception as e:
+            print('Error getting updates: ' + str(e))
 
     else:
         print('No new updates')

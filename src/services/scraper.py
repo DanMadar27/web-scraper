@@ -7,14 +7,19 @@ from ..utils.scraper import *
 
 # Get the latest updates from the Call of Duty website
 def get_updates(date):
-    response = requests.get(cod.COD_PATCHES_URL)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    updates = soup.find_all('div', class_='card-inner')
+    try:
+        response = requests.get(cod.COD_PATCHES_URL)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        updates = soup.find_all('div', class_='card-inner')
 
-    if is_new_update(updates[0], date):
-        return updates
+        if is_new_update(updates[0], date):
+            return updates
+        
+        return None
     
-    return None
+    except Exception as e:
+        print(e)
+        return None
 
 # Get notes for a specific update_card
 def get_notes(update_card):
