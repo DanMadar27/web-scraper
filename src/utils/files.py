@@ -1,11 +1,20 @@
+from os import path
+from datetime import datetime
 import pdfkit
 
-def htmlToPdf(html, output):
-    """
-    html: html string
-    output: output file path
-    """
+def modification_time(file_path):
+    if not path.exists(file_path):
+        return None
+    
+    modification_time = path.getmtime(file_path)
+    modification_datetime = datetime.fromtimestamp(modification_time)
+    return modification_datetime
 
+"""
+html: html string
+output: output file path
+"""
+def html_to_pdf(html, output):
     html = '''
         <!DOCTYPE html>
         <html>
