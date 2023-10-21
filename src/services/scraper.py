@@ -35,8 +35,25 @@ def get_notes(update_card):
 def weapons_info(update_page):
     soup = BeautifulSoup(update_page.text, 'html.parser')
     h3_tag = soup.find(find_weapons_title)
-    weapons_info = h3_tag.find_next('ul')
-    return weapons_info
+
+    if h3_tag:
+
+        if h3_tag.find_next().name == 'ul' or h3_tag.find_next().name == 'ol':
+            return h3_tag.find_next()
+
+        # Find wrapper of the ul
+        element = h3_tag.find_next('div')
+
+        while element and not element_contains(element, 'ul'):
+            element = element.find_next('div')
+
+            # Ensure that the element is not a new section    
+            if element_contains(element, 'h3'):
+                return ''
+        
+        return element if element else ''
+    
+    return ''
 
 # Check if the update is newer than the date
 def is_new_update(update, date):
@@ -61,7 +78,7 @@ def export_updates():
             update_notes = get_notes(updates[0])
             html_to_pdf(str(update_notes), WEAPONS_PATH)
             print('New updates found')
-            
+
         except Exception as e:
             print('Error getting updates: ' + str(e))
 
