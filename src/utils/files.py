@@ -14,7 +14,7 @@ def modification_time(file_path):
 html: html string
 output: output file path
 """
-def html_to_pdf(html, output):
+def html_to_pdf(html, output, title):
     html = '''
         <!DOCTYPE html>
         <html>
@@ -36,7 +36,10 @@ def html_to_pdf(html, output):
                     }
                 </style>
             </head>
-            <body>''' + html + '</body>' + '''
-        </html>'''
+            <body>''' + \
+                '<h1>' + title + '</h1>' + \
+                html + \
+            '</body>' + \
+        '</html>'
 
     pdfkit.from_string(html, output)

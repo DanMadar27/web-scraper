@@ -76,7 +76,7 @@ def export_updates():
     if updates:
         try:
             update_notes = get_notes(updates[0])
-            html_to_pdf(str(update_notes), WEAPONS_PATH)
+            html_to_pdf(str(update_notes), WEAPONS_PATH, 'Updates')
             print('New updates found')
 
         except Exception as e:
