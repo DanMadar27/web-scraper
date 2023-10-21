@@ -19,6 +19,7 @@ def html_to_pdf(html, output, title):
         <!DOCTYPE html>
         <html>
             <head>
+                <meta charset="utf-8">
                 <style>
                     body {
                         font-family: 'Arial';
