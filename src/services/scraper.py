@@ -3,7 +3,10 @@ import requests
 from datetime import datetime
 
 from ..config import cod
+from src.config.files import WEAPONS_PATH
+
 from ..utils.scraper import *
+from src.utils.files import modification_time, html_to_pdf
 
 # Get the latest updates from the Call of Duty website
 def get_updates(date):
@@ -48,3 +51,21 @@ def is_new_update(update, date):
     
     return False
     
+def export_updates():
+    # Get updates later than the last fetch
+    updates = get_updates(modification_time(WEAPONS_PATH))
+
+    # If there are latest patch notes, get the notes and convert to pdf
+    if updates:
+        try:
+            update_notes = get_notes(updates[0])
+            html_to_pdf(str(update_notes), WEAPONS_PATH)
+            print('New updates found')
+            
+        except Exception as e:
+            print('Error getting updates: ' + str(e))
+
+    else:
+        print('No new updates')
+
+    return WEAPONS_PATH

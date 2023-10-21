@@ -3,11 +3,9 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import threading
 
-from src.services.scraper import get_updates, get_notes
+from src.services.scraper import export_updates
 from src.utils.logs import log_command
-from src.utils.files import modification_time, html_to_pdf
 from src.utils.rateLimit import is_rate_limited, reset_rate_limit
-from src.config.files import WEAPONS_PATH
 
 async def start_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if is_rate_limited():
@@ -37,23 +35,8 @@ async def updates_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         return
     
     log_command('updates', update.message.from_user)
-    
-    # Get updates later than the last fetch
-    updates = get_updates(modification_time(WEAPONS_PATH))
-
-    # If there are latest patch notes, get the notes and convert to pdf
-    if updates:
-        try:
-            update_notes = get_notes(updates[0])
-            html_to_pdf(str(update_notes), WEAPONS_PATH)
-            print('New updates found')
-        except Exception as e:
-            print('Error getting updates: ' + str(e))
-
-    else:
-        print('No new updates')
-
-    await context.bot.send_document(chat_id = update.message.chat_id, document = open(WEAPONS_PATH, 'rb'))
+    updates_file = export_updates()
+    await context.bot.send_document(chat_id = update.message.chat_id, document = open(updates_file, 'rb'))
 
 def start():
     app = ApplicationBuilder().token(environ.get('BOT_TOKEN')).build()
