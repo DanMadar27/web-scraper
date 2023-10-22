@@ -22,9 +22,14 @@ def html_to_pdf(html, output, title):
                 <meta charset="utf-8">
                 <style>
                     body {
+                        padding: 15px;
                         font-family: 'Arial';
                         line-height: 110%;
                         letter-spacing: 1px;
+                    }
+
+                    h1 {
+                        margin: 15px 0;
                     }
 
                     ul {

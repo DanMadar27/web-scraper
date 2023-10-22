@@ -26,10 +26,17 @@ def get_updates(date):
 
 # Get notes for a specific update_card
 def get_notes(update_card):
+    # Get the link to the update page
     h2_tag = update_card.find('h2')
     link = h2_tag.find('a')
     response = requests.get(cod.COD_URL + link['href'])
-    return weapons_info(response)
+
+    # Get the date of the update
+    date = update_card.find('div', class_='date')
+    date = date.text if date else ''
+
+    # Return the notes and the date
+    return (weapons_info(response), date)
 
 # Get the weapons info for a specific update
 def weapons_info(update_page):
@@ -75,8 +82,8 @@ def export_updates():
     # If there are latest patch notes, get the notes and convert to pdf
     if updates:
         try:
-            update_notes = get_notes(updates[0])
-            html_to_pdf(str(update_notes), WEAPONS_PATH, 'Updates')
+            (update_notes, date) = get_notes(updates[0])
+            html_to_pdf(str(update_notes), WEAPONS_PATH, f'Updates - {date}')
             print('New updates found')
 
         except Exception as e:
