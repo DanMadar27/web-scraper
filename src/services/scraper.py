@@ -31,17 +31,20 @@ def get_notes(update_card):
     link = h2_tag.find('a')
     response = requests.get(cod.COD_URL + link['href'])
 
+    update_page = BeautifulSoup(response.text, 'html.parser')
+
     # Get the date of the update
-    date = update_card.find('div', class_='date')
+    date = update_page.find('p', class_='dateline')
     date = date.text if date else ''
 
-    # Return the notes and the date
-    return (weapons_info(response), date)
+    # Get the weapons info
+    weapons = weapons_info(update_page)
+    
+    return (weapons, date)
 
 # Get the weapons info for a specific update
 def weapons_info(update_page):
-    soup = BeautifulSoup(update_page.text, 'html.parser')
-    h3_tag = soup.find(find_weapons_title)
+    h3_tag = update_page.find(find_weapons_title)
 
     if h3_tag:
 
