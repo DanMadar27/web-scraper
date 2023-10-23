@@ -25,6 +25,7 @@ async def help_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     log_command('help', update.message.from_user)
 
     await update.message.reply_text(
+        'These are the possible commands:\n\n'
         '/start - Show a welcome message\n' +
         '/help - Show possible commands\n' + 
         '/updates - Get the latest patch notes of Call of Duty'
