@@ -10,12 +10,9 @@ def modification_time(file_path):
     modification_datetime = datetime.fromtimestamp(modification_time)
     return modification_datetime
 
-"""
-html: html string
-output: output file path
-"""
-def html_to_pdf(html, output, title):
-    html = '''
+# Convert html string to styled html
+def str_to_html(html, title, date):
+    return '''
         <!DOCTYPE html>
         <html>
             <head>
@@ -24,7 +21,6 @@ def html_to_pdf(html, output, title):
                     body {
                         padding: 15px;
                         font-family: 'Arial';
-                        line-height: 110%;
                         letter-spacing: 1px;
                     }
 
@@ -44,8 +40,17 @@ def html_to_pdf(html, output, title):
             </head>
             <body>''' + \
                 '<h1>' + title + '</h1>' + \
+                '<h2>' + date + '</h2>' + \
                 html + \
             '</body>' + \
         '</html>'
 
+"""
+html: html string
+output: output file path
+title: title of the file
+date: date of the file
+"""
+def html_to_pdf(html, output, title, date):
+    html = str_to_html(html, title, date) # Create styled html
     pdfkit.from_string(html, output)

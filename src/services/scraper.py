@@ -33,6 +33,10 @@ def get_notes(update_card):
 
     update_page = BeautifulSoup(response.text, 'html.parser')
 
+    # Get the title of the update
+    title = update_page.find('h1')
+    title = title.text if title else ''
+
     # Get the date of the update
     date = update_page.find('p', class_='dateline')
     date = date.text if date else ''
@@ -40,7 +44,7 @@ def get_notes(update_card):
     # Get the weapons info
     weapons = weapons_info(update_page)
     
-    return (weapons, date)
+    return (weapons, title, date)
 
 # Get the weapons info for a specific update
 def weapons_info(update_page):
@@ -85,8 +89,8 @@ def export_updates():
     # If there are latest patch notes, get the notes and convert to pdf
     if updates:
         try:
-            (update_notes, date) = get_notes(updates[0])
-            html_to_pdf(str(update_notes), WEAPONS_PATH, f'Updates - {date}')
+            (update_notes, title, date) = get_notes(updates[0])
+            html_to_pdf(str(update_notes), WEAPONS_PATH, title, date)
             print('New updates found')
 
         except Exception as e:
