@@ -27,22 +27,29 @@ If you like to run the program using VS Code, you can create `launch.json` file 
 
 ```json
 {
-  // Use IntelliSense to learn about possible attributes.
-  // Hover to view descriptions of existing attributes.
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
 
     {
-      "name": "Python: Launch",
+      "name": "Launch",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Test",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/tests/run_tests.py",
       "console": "integratedTerminal"
     }
   ]
 }
 ```
+
+## Tests
+To execute the tests, run `python src/tests/run_tests.py` or `python src/tests/test_module.py`.
 
 ## Commands
 
