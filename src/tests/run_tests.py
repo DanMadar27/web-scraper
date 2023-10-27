@@ -12,4 +12,10 @@ if __name__ == '__main__':
     # suite.addTest(unittest.TestLoader().loadTestsFromTestCase(TestModule2))
 
     # Run the test suite with verbosity set to 2 for detailed output
-    unittest.TextTestRunner(verbosity = 2).run(suite)
+    test_result = unittest.TextTestRunner(verbosity = 2).run(suite)
+
+    # Exit with an appropriate exit code based on the test result
+    if test_result.wasSuccessful():
+        exit(0) # Tests passed, exit with code 0 (success)
+    else:
+        exit(1) # Tests failed, exit with code 1 (failure)
