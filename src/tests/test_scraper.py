@@ -31,6 +31,9 @@ class TestScraper(unittest.TestCase):
 
     @patch('src.services.scraper.requests.get')
     def test_export(self, mock_requests_get):
+        # make test fail
+        self.assertTrue(False)
+        
         # Mock the behavior of requests.get
         mock_response = mock_requests_get.return_value
         mock_response.status_code = 200
