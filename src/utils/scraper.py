@@ -17,7 +17,6 @@ def random_user_agent():
 
     return random.choice(user_agents) 
 
-        
 def find_weapons_title(tag):
     return tag.name == 'h3' and tag.get_text().lower() == 'weapons'
 
