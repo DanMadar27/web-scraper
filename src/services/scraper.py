@@ -34,8 +34,8 @@ def get_updates(date):
 # Get notes for a specific update_card
 def get_notes(update_card):
     # Get the link to the update page
-    h2_tag = update_card.find('h2')
-    link = h2_tag.find('a')
+    h_tag = update_card.find(['h2', 'h3'])
+    link = h_tag.find('a')
     response = requests.get(cod.COD_URL + link['href'], headers = headers())
 
     update_page = BeautifulSoup(response.text, 'html.parser')
