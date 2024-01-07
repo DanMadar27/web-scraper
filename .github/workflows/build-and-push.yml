@@ -104,11 +104,12 @@ jobs:
     - name: Login to Docker Hub
       run: docker login
       
-    - name: Build Docker image
-      run: docker build . --file Dockerfile --tag web-scraper:latest
-      
-    - name: Change tag of Docker image
-      run: docker tag web-scraper:latest ${{ secrets.DOCKER_USERNAME }}/web-scraper:latest
-      
-    - name: Push Docker image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/web-scraper:latest
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5.1.0
+
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKER_USERNAME }}/web-scraper:latest
+
