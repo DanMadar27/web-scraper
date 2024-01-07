@@ -111,5 +111,5 @@ jobs:
         context: .
         file: Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/web-scraper:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/web-scraper:latest # Can also be a list of tags separated by a comma (,). For example: tag1, tag2, tag3
 
