@@ -1,6 +1,10 @@
 name: Build and Push
 
 on:
+  # Enable running this workflow manually using:
+  # workflow_dispatch:
+
+  # Automatically run workflow on push to main branch or pull request targeting main
   push:
     branches: [ "master" ]
   pull_request:
